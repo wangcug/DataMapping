@@ -1,0 +1,570 @@
+@prefix map: <#> .
+@prefix db: <> .
+@prefix vocab: <http://min-depKG/property/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#> .
+@prefix jdbc: <http://d2rq.org/terms/jdbc/> .
+@prefix: <http://min-depKG/relations/> . 
+
+map:database a d2rq:Database;
+	d2rq:jdbcDriver "com.mysql.jdbc.Driver";
+	d2rq:jdbcDSN "jdbc:mysql:///cudep?useSSL=false";
+	d2rq:username "root";
+	d2rq:password "123456";
+	jdbc:zeroDateTimeBehavior "convertToNull";
+	jdbc:autoReconnect "true";
+	.
+
+# Table mineraldeposit
+map:mineraldeposit a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/mineraldeposit/@@mineraldeposit.name|urlify@@";
+	d2rq:class vocab:mineraldeposit;
+	d2rq:classDefinitionLabel "mineraldeposit"@en;
+	d2rq:lang "en";
+	.
+
+map:mineraldeposit_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property vocab:mineraldeposit_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "mineraldeposit.name";
+	.
+map:mineraldeposit_latitude a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property vocab:mineraldeposit_latitude;
+	d2rq:propertyDefinitionLabel "Latitude";
+	d2rq:column "mineraldeposit.latitude";
+	.
+map:mineraldeposit_longtitude a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property vocab:mineraldeposit_longtitude;
+	d2rq:propertyDefinitionLabel "Lontitude";
+	d2rq:column "mineraldeposit.longtitude";
+	.
+map:mineraldeposit_oreton a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property vocab:mineraldeposit_oreton;
+	d2rq:propertyDefinitionLabel "Ton";
+	d2rq:column "mineraldeposit.oreton";
+	.
+map:mineraldeposit_cugrade a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property vocab:mineraldeposit_cugrad;
+	d2rq:propertyDefinitionLabel "CuGrade";
+	d2rq:column "mineraldeposit.cugrd";
+	.
+map:mineraldeposit_mograde a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property vocab:mineraldeposit_mograd;
+	d2rq:propertyDefinitionLabel "MoGrade";
+	d2rq:column "mineraldeposit.mogrd";
+	.
+map:mineraldeposit_augrade a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property vocab:mineraldeposit_augrade;
+	d2rq:propertyDefinitionLabel "AuGrade";
+	d2rq:column "mineraldeposit.augrd";
+	.
+map:mineraldeposit_aggrade a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property vocab:mineraldeposit_aggrade;
+	d2rq:propertyDefinitionLabel "AgGrade";
+	d2rq:column "mineraldeposit.aggrd";
+	.
+map:mineraldeposit_depositage a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property vocab:mineraldeposit_depositage;
+	d2rq:propertyDefinitionLabel "Age";
+	d2rq:column "mineraldeposit.agemy";
+	.
+
+# Table nonmetalmineral
+map:nonmetalmineral a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/nonmetalmineral/@@nonmetalmineral.Name|urlify@@";
+	d2rq:class vocab:nonmetalmineral;
+	d2rq:classDefinitionLabel "nonmetalmineral"@en;
+	d2rq:lang "en";
+	.
+map:nonmetalmineral_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:nonmetalmineral;
+	d2rq:property vocab:nonmetalmineral_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "nonmetalmineral.Name";
+	.
+
+# Table dep-nonmetalmineral (n:m)
+map:dep-nonmetalmineral a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property :hasNon-metalmineral;
+	d2rq:refersToClassMap map:nonmetalmineral;
+	d2rq:join "dep-nonmetalmineral.SID => mineraldeposit.depid";
+	d2rq:join "dep-nonmetalmineral.EID => nonmetalmineral.id";
+	.
+
+# Table metalmineral
+map:metalmineral a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/metalmineral/@@metalmineral.Name|urlify@@";
+	d2rq:class vocab:metalmineral;
+	d2rq:classDefinitionLabel "metalmineral"@en;
+	.
+map:metalmineral_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:metalmineral;
+	d2rq:property vocab:metalmineral_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "metalmineral.Name";
+	.
+
+# Table dep-metalmineral (n:m)
+map:dep-metalmineral a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property :hasMetalmineral;
+	d2rq:refersToClassMap map:metalmineral;
+	d2rq:join "dep-metalmineral.SID => mineraldeposit.depid";
+	d2rq:join "dep-metalmineral.EID => metalmineral.id";
+	.
+
+# Table alterationstagezone
+map:alterationstagezone a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/alterationstagezone/@@alterationstagezone.Name|urlify@@";
+	d2rq:class vocab:alterationstagezone;
+	d2rq:classDefinitionLabel "alterationstagezone"@en;
+	.
+map:alterationstagezone_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:alterationstagezone;
+	d2rq:property vocab:alterationstagezone_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "alterationstagezone.Name";
+	.
+
+# Table dep-alterationstagezone (n:m)
+map:dep-alterationstagezone__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property :hasAlterationStageZone;
+	d2rq:refersToClassMap map:alterationstagezone;
+	d2rq:join "dep-alterationstagezone.SID => mineraldeposit.depid";
+	d2rq:join "dep-alterationstagezone.EID => alterationstagezone.id";
+	.
+
+# Table alterationtype
+map:alterationtype a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/alterationtype/@@alterationtype.Name|urlify@@";
+	d2rq:class vocab:alterationtype;
+	d2rq:classDefinitionLabel "alterationtype"@en;
+	d2rq:lang "en";
+	.
+map:alterationtype_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:alterationtype;
+	d2rq:property vocab:alterationtype_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "alterationtype.Name";
+	.
+
+# Table city
+map:city a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/city/@@city.Name|urlify@@";
+	d2rq:class vocab:city;
+	d2rq:classDefinitionLabel "city"@en;
+	d2rq:lang "en";
+	.
+map:city_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:city;
+	d2rq:property vocab:city_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "city.Name";
+	.
+
+
+# Table documents
+map:documents a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/documents/@@documents.year|urlify@@";
+	d2rq:class vocab:documents;
+	d2rq:classDefinitionLabel "documents";
+	.
+map:documents_title a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:documents;
+	d2rq:property vocab:documents_title;
+	d2rq:propertyDefinitionLabel "title";
+	d2rq:column "documents.Name";
+	.
+map:documents_year a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:documents;
+	d2rq:property vocab:documents_year;
+	d2rq:propertyDefinitionLabel "year";
+	d2rq:column "documents.year";
+	.
+map:documents_DOI a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:documents;
+	d2rq:property vocab:documents_DOI;
+	d2rq:propertyDefinitionLabel "DOI";
+	d2rq:column "documents.DOI";
+	.
+
+# Table dep-documents (n:m)
+map:dep-documents__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property :isRecordedIn;
+	d2rq:refersToClassMap map:documents;
+	d2rq:join "dep-documents.SID => mineraldeposit.depid";
+	d2rq:join "dep-documents.EID => documents.id";
+	.
+
+# Table fluidinclusion
+map:fluidinclusion a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/fluidinclusion/@@fluidinclusion.Name|urlify@@";
+	d2rq:class vocab:fluidinclusion;
+	d2rq:classDefinitionLabel "fluidinclusion"@en;
+	d2rq:lang "en";
+	.
+map:fluidinclusion_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:fluidinclusion;
+	d2rq:property vocab:fluidinclusion_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "fluidinclusion.Name";
+	.
+
+# Table geologicalsetting
+map:geologicalsetting a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/geologicalsetting/@@geologicalsetting.Name|urlify@@";
+	d2rq:class vocab:geologicalsetting;
+	d2rq:classDefinitionLabel "geologicalsetting"@en;
+	d2rq:lang "en";
+	.
+map:geologicalsetting_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:geologicalsetting;
+	d2rq:property vocab:geologicalsetting_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "geologicalsetting.Name";
+	.
+
+# Table geologicalstructure
+map:geologicalstructure a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/geologicalstructure/@@geologicalstructure.Name|urlify@@";
+	d2rq:class vocab:geologicalstructure;
+	d2rq:classDefinitionLabel "geologicalstructure"@en;
+	d2rq:lang "en";
+	.
+map:geologicalstructure_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:geologicalstructure;
+	d2rq:property vocab:geologicalstructure_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "geologicalstructure.Name";
+	.
+
+# Table dep-geologicalsetting (n:m)
+map:dep-geologicalsetting__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property :isLocatedIn;
+	d2rq:refersToClassMap map:geologicalsetting;
+	d2rq:join "dep-geologicalsetting.SID => mineraldeposit.depid";
+	d2rq:join "dep-geologicalsetting.EID => geologicalsetting.id";
+	.
+
+# Table geologicaltimescale
+map:geologicaltimescale a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/geologicaltimescale/@@geologicaltimescale.Name|urlify@@";
+	d2rq:class vocab:geologicaltimescale;
+	d2rq:classDefinitionLabel "geologicaltimescale"@en;
+	d2rq:lang "en";
+	.
+map:geologicaltimescale_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:geologicaltimescale;
+	d2rq:property vocab:geologicaltimescale_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "geologicaltimescale.Name";
+	.
+
+
+# Table dep-geologicalunit (n:m)
+map:dep-geologicalunit__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property :isRelatedTo;
+	d2rq:refersToClassMap map:geologicalunit;
+	d2rq:join "dep-geologicalunit.SID => mineraldeposit.depid";
+	d2rq:join "dep-geologicalunit.EID => geologicalunit.id";
+	.
+
+# Table geologicalunit
+map:geologicalunit a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/geologicalunit/@@geologicalunit.Name|urlify@@";
+	d2rq:class vocab:geologicalunit;
+	d2rq:classDefinitionLabel "geologicalunit"@en;
+	d2rq:lang "en";
+	.
+map:geologicalunit_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:geologicalunit;
+	d2rq:property vocab:geologicalunit_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "geologicalunit.Name";
+	.
+
+# Table dep-country (n:m)
+map:dep-country__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property :isLocatedIn;
+	d2rq:refersToClassMap map:country;
+	d2rq:join "dep-country.SID => mineraldeposit.depid";
+	d2rq:join "dep-country.EID => country.id";
+	.
+
+# Table country
+map:country a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/country/@@country.Name|urlify@@";
+	d2rq:class vocab:country;
+	d2rq:classDefinitionLabel "country"@en;
+	d2rq:lang "en";
+	.
+map:country_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:country;
+	d2rq:property vocab:country_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "country.Name";
+	.
+
+# Table dep-sedimentaryrock (n:m)
+map:dep-sedimentaryrock__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property :isRelatedTo;
+	d2rq:refersToClassMap map:sedimentaryrock;
+	d2rq:join "dep-sedimentaryrock.SID => mineraldeposit.depid";
+	d2rq:join "dep-sedimentaryrock.EID => sedimentaryrock.id";
+	.
+
+# Table sedimentaryrock
+map:sedimentaryrock a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/sedimentaryrock/@@sedimentaryrock.Name|urlify@@";
+	d2rq:class vocab:sedimentaryrock;
+	d2rq:classDefinitionLabel "sedimentaryrock"@en;
+	d2rq:lang "en";
+	.
+map:sedimentaryrock_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:sedimentaryrock;
+	d2rq:property vocab:sedimentaryrock_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "sedimentaryrock.Name";
+	.
+
+# Table dep-igneousrock (n:m)
+map:dep-igneousrock__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property :isControlledBy;
+	d2rq:refersToClassMap map:igneousrock;
+	d2rq:join "dep-igneousrock.SID => mineraldeposit.depid";
+	d2rq:join "dep-igneousrock.EID => igneousrock.id";
+	.
+
+# Table igneousrock
+map:igneousrock a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/igneousrock/@@igneousrock.Name|urlify@@";
+	d2rq:class vocab:igneousrock;
+	d2rq:classDefinitionLabel "igneousrock"@en;
+	d2rq:lang "en";
+	.
+map:igneousrock_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:igneousrock;
+	d2rq:property vocab:igneousrock_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "igneousrock.Name";
+	.
+
+# Table analysisinstrument
+map:analysisinstrument a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/analysisinstrument/@@analysisinstrument.Name|urlify@@";
+	d2rq:class vocab:analysisinstrument;
+	d2rq:classDefinitionLabel "analysisinstrument"@en;
+	d2rq:lang "en";
+	.
+map:analysisinstrument_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:analysisinstrument;
+	d2rq:property vocab:analysisinstrument_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "analysisinstrument.Name";
+	.
+
+# Table analysismethod
+map:analysismethod a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/analysismethod/@@analysismethod.Name|urlify@@";
+	d2rq:class vocab:analysismethod;
+	d2rq:classDefinitionLabel "analysismethod"@en;
+	d2rq:lang "en";
+	.
+map:analysismethod_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:analysismethod;
+	d2rq:property vocab:analysismethod_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "analysismethod.Name";
+	.
+
+# Table locality
+map:locality a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/locality/@@locality.Name|urlify@@";
+	d2rq:class vocab:locality;
+	d2rq:classDefinitionLabel "locality"@en;
+	d2rq:lang "en";
+	.
+map:locality_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:locality;
+	d2rq:property vocab:locality_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "locality.Name";
+	.
+
+# Table majorelement
+map:majorelement a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/majorelement/@@majorelement.Name|urlify@@";
+	d2rq:class vocab:majorelement;
+	d2rq:classDefinitionLabel "majorelement"@en;
+	d2rq:lang "en";
+	.
+map:majorelement_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:majorelement;
+	d2rq:property vocab:majorelement_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "majorelement.Name";
+	.
+
+# Table metalmineral
+map:metalmineral a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/metalmineral/@@metalmineral.Name|urlify@@";
+	d2rq:class vocab:metalmineral;
+	d2rq:classDefinitionLabel "metalmineral"@en;
+	d2rq:lang "en";
+	.
+map:metalmineral_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:metalmineral;
+	d2rq:property vocab:metalmineral_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "metalmineral.Name";
+	.
+
+# Table dep-metamorphicrock (n:m)
+map:dep-metamorphicrock__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property :isControlledBy;
+	d2rq:refersToClassMap map:metamorphicrock;
+	d2rq:join "dep-metamorphicrock.SID => mineraldeposit.depid";
+	d2rq:join "dep-metamorphicrock.EID => metamorphicrock.id";
+	.
+
+# Table metamorphicrock
+map:metamorphicrock a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/metamorphicrock/@@metamorphicrock.Name|urlify@@";
+	d2rq:class vocab:metamorphicrock;
+	d2rq:classDefinitionLabel "metamorphicrock"@en;
+	d2rq:lang "en";
+	.
+map:metamorphicrock_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:metamorphicrock;
+	d2rq:property vocab:metamorphicrock_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "metamorphicrock.Name";
+	.
+
+# Table mineralization
+map:mineralization a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/mineralization/@@mineralization.Name|urlify@@";
+	d2rq:class vocab:mineralization;
+	d2rq:classDefinitionLabel "mineralization"@en;
+	d2rq:lang "en";
+	.
+map:mineralization_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineralization;
+	d2rq:property vocab:mineralization_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "mineralization.Name";
+	.
+
+# Table dep-province (n:m)
+map:dep-province__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:mineraldeposit;
+	d2rq:property :isLocatedIn;
+	d2rq:refersToClassMap map:province;
+	d2rq:join "dep-province.SID => mineraldeposit.depid";
+	d2rq:join "dep-province.EID => province.id";
+	.
+
+# Table province
+map:province a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/province/@@province.Name|urlify@@";
+	d2rq:class vocab:province;
+	d2rq:classDefinitionLabel "province"@en;
+	d2rq:lang "en";
+	.
+map:province_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:province;
+	d2rq:property vocab:province_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "province.Name";
+	.
+
+
+
+# Table traceelement
+map:traceelement a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/traceelement/@@traceelement.Name|urlify@@";
+	d2rq:class vocab:traceelement;
+	d2rq:classDefinitionLabel "traceelement"@en;
+	d2rq:lang "en";
+	.
+map:traceelement_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:traceelement;
+	d2rq:property vocab:traceelement_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "traceelement.Name";
+	.
+
+
+# Table isotopeelement
+map:isotopeelement a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/isotopeelement/@@isotopeelement.Name|urlify@@";
+	d2rq:class vocab:isotopeelement;
+	d2rq:classDefinitionLabel "isotopeelement"@en;
+	d2rq:lang "en";
+	.
+map:isotopeelement_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:isotopeelement;
+	d2rq:property vocab:isotopeelement_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "isotopeelement.Name";
+	.
+
+# Table majorelement
+map:majorelement a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://min-depKG/majorelement/@@majorelement.Name|urlify@@";
+	d2rq:class vocab:majorelement;
+	d2rq:classDefinitionLabel "majorelement"@en;
+	d2rq:lang "en";
+	.
+map:majorelement_Name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:majorelement;
+	d2rq:property vocab:majorelement_Name;
+	d2rq:propertyDefinitionLabel "Name";
+	d2rq:column "majorelement.Name";
+	.
